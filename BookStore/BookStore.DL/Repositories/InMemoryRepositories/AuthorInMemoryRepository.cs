@@ -3,7 +3,7 @@ using BookStore.Models.Models;
 
 namespace BookStore.DL.Repositories.InMemoryRepositories
 {
-    public class AuthorInMemoryRepository : IAuthorInMemoryRepository
+    public class AuthorInMemoryRepository : IAuthorRepository
     {
         private static List<Author> _authors = new List<Author>()
         {
@@ -30,12 +30,12 @@ namespace BookStore.DL.Repositories.InMemoryRepositories
         {
             return _authors.FirstOrDefault(a => a.Id == id);
         }
-        public Author? AddAuthor(Author author)
+        public Author AddAuthor(Author author)
         {
             _authors.Add(author);
             return author;
         }
-        public Author? UpdateAuthor(Author author)
+        public Author UpdateAuthor(Author author)
         {
             var existingAuthor = _authors.FirstOrDefault(a => a.Id == author.Id);
             if (existingAuthor == null) return null;
@@ -49,6 +49,15 @@ namespace BookStore.DL.Repositories.InMemoryRepositories
             var author = _authors.FirstOrDefault(u => u.Id == id);
             _authors.Remove(author);
             return author;
+        }
+        public Author GetAuthorByName(string name)
+        {
+            return _authors.FirstOrDefault(a => a.Name == name);
+        }
+
+        public Author GetAuthorByNickname(string nickname)
+        {
+            return _authors.FirstOrDefault(a => a.Nickname == nickname);
         }
     }
 }

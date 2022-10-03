@@ -3,7 +3,7 @@ using BookStore.Models.Models;
 
 namespace BookStore.DL.Repositories.InMemoryRepositories
 {
-    public class BookInMemoryRepositry : IBookInMemoryRepositry
+    public class BookInMemoryRepositry : IBookRepositry
     {
         private static List<Book> _books = new List<Book>()
         {
@@ -20,7 +20,7 @@ namespace BookStore.DL.Repositories.InMemoryRepositories
                 AuthorId = 2
             }
         };
-        public Book? AddBook(Book book)
+        public Book AddBook(Book book)
         {
             _books.Add(book);
             return book;
@@ -34,7 +34,7 @@ namespace BookStore.DL.Repositories.InMemoryRepositories
             return book;
         }
 
-        public IEnumerable<Book> GetAllBook()
+        public IEnumerable<Book> GetAllBooks()
         {
             return _books;
         }
@@ -44,7 +44,12 @@ namespace BookStore.DL.Repositories.InMemoryRepositories
             return _books.FirstOrDefault(b => b.Id == id);
         }
 
-        public Book? UpdateBook(Book book)
+        public Book GetByTitle(string title)
+        {
+            return _books.FirstOrDefault(b => b.Title == title);
+        }
+
+        public Book UpdateBook(Book book)
         {
             var existingBook = _books.FirstOrDefault(a => a.Id == book.Id);
             if (existingBook == null) return null;

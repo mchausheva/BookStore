@@ -1,6 +1,7 @@
 using BookStore.BL.Interfaces;
-using BookStore.Models.Models;
+using BookStore.Models.Requests;
 using Microsoft.AspNetCore.Mvc;
+using System.Net;
 
 namespace BookStore.Controllers
 {
@@ -15,30 +16,70 @@ namespace BookStore.Controllers
             _logger = logger;
             _personService = personService;
         }
-        [HttpGet(nameof(Get))]
-        public IEnumerable<Person> Get()
+
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [HttpGet(nameof(GetAllPeople))]
+        public IActionResult GetAllPeople()
         {
-            return _personService.GetAllPeople();
+            return Ok(_personService.GetAllPeople());
         }
+
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [HttpGet(nameof(GetById))]
-        public Person? GetById(int id)
+        public IActionResult GetById(int id)
         {
-            return _personService.GetById(id);
+            if (id <= 0)
+            {
+                _logger.LogInformation("Id must be greater than 0");
+                return BadRequest($"Parameter id: {id} must be greater than 0");
+            }
+
+            var result = _personService.GetById(id);
+
+            if (result == null) return NotFound(id);
+
+            return Ok(result);
         }
+
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpPost(nameof(AddMethod))]
-        public void AddMethod(Person person)
+        public IActionResult AddMethod([FromBody] AddPersonRequest personRequest)
         {
-            _personService.AddPerson(person);
+            var result = _personService.AddPerson(personRequest);
+
+            if (result.HttpStatusCode == HttpStatusCode.BadRequest)
+                return BadRequest(result);
+
+            return Ok(result);
         }
+
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpPut(nameof(UpdateMethod))]
-        public void UpdateMethod(Person person)
+        public IActionResult UpdateMethod([FromBody] UpdatePersonRequest personRequest)
         {
-            _personService.UpdatePerson(person);
+            var result = _personService.UpdatePerson(personRequest);
+
+            if (result.HttpStatusCode == HttpStatusCode.BadRequest)
+                return BadRequest(result);
+
+            return Ok(result);
         }
+
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpDelete(nameof(DeleteMethod))]
-        public Person? DeleteMethod(int id)
+        public IActionResult DeleteMethod(int id)
         {
-            return _personService.DeletePersonById(id);
+            if (id > 0 && _personService.GetById != null)
+            {
+                _personService.DeletePersonById(id);
+                return Ok($"Person with id {id} is successfully deleted");
+            }
+            return BadRequest($"Person with id {id} is not deleted");
         }
     }
 }
