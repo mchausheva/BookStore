@@ -1,18 +1,13 @@
 ﻿using BookStore.Models.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BookStore.BL.Interfaces
 {
     public interface IPersonService
     {
-        IEnumerable<Person> GetAllUsers();
+        IEnumerable<Person> GetAllPeople();
         Person GetById(int id);
-        Person? AddUser(Person user);
-        Person? UpdateUser(Person user);
-        Person? DeleteUserById(int id);
+        Person? AddPerson(Person person);
+        Person? UpdatePerson(Person person);
+        Person? DeletePersonById(int id);
     }
 }

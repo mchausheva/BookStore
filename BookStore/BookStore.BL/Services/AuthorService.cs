@@ -1,12 +1,6 @@
 ﻿using BookStore.BL.Interfaces;
 using BookStore.DL.Interfaces;
 using BookStore.Models.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http.Headers;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BookStore.BL.Services
 {
@@ -35,7 +29,7 @@ namespace BookStore.BL.Services
 
         public Author GetById(int id)
         {
-            return _authorRepository.GetById(id);   
+            return _authorRepository.GetById(id);
         }
 
         public Author? UpdateAuthor(Author author)

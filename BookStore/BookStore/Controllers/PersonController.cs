@@ -1,4 +1,4 @@
-using BookStore.DL.Interfaces;
+using BookStore.BL.Interfaces;
 using BookStore.Models.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,50 +8,39 @@ namespace BookStore.Controllers
     [Route("[controller]")]
     public class PersonController : ControllerBase
     {
-        private readonly IPersonInMemoryRepository _personInMemoryRepository;
+        private readonly IPersonService _personService;
         private readonly ILogger<PersonController> _logger;
-        public PersonController(ILogger<PersonController> logger, IPersonInMemoryRepository userInMemoryRepository)
+        public PersonController(ILogger<PersonController> logger, IPersonService personService)
         {
             _logger = logger;
-            _personInMemoryRepository = userInMemoryRepository;
-        }
-
-        [HttpGet(nameof(GetGuid))]
-        public Guid GetGuid()
-        {
-            return _personInMemoryRepository.GetGuidId();
+            _personService = personService;
         }
 
         [HttpGet(nameof(Get))]
         public IEnumerable<Person> Get()
         {
-            return _personInMemoryRepository.GetAllUsers();
+            return _personService.GetAllPeople();
         }
 
         [HttpGet(nameof(GetById))]
         public Person? GetById(int id)
         {
-            return _personInMemoryRepository.GetById(id);
+            return _personService.GetById(id);
         }
-        //[HttpGet(nameof(GetByFirstName))]
-        //public IEnumerable<User> GetByFirstName(string name)
-        //{
-        //    return _userInMemoryRepository.Where(tm => tm.FirstName == name);
-        //}
         [HttpPost(nameof(AddMethod))]
-        public void AddMethod(Person user)
+        public void AddMethod(Person person)
         {
-            _personInMemoryRepository.AddUser(user);
+            _personService.AddPerson(person);
         }
         [HttpPut(nameof(UpdateMethod))]
-        public void UpdateMethod(Person user)
+        public void UpdateMethod(Person person)
         {
-            _personInMemoryRepository.UpdateUser(user);
+            _personService.UpdatePerson(person);
         }
         [HttpDelete(nameof(DeleteMethod))]
         public Person? DeleteMethod(int id)
         {
-            return _personInMemoryRepository.DeleteUserById(id);
+            return _personService.DeletePersonById(id);
         }
     }
 }

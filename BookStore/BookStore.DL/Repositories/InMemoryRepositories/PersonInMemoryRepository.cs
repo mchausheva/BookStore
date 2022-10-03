@@ -1,6 +1,5 @@
 ﻿using BookStore.DL.Interfaces;
 using BookStore.Models.Models;
-using System.Runtime.CompilerServices;
 
 namespace BookStore.DL.Repositories.InMemoryRepositories
 {
@@ -23,13 +22,8 @@ namespace BookStore.DL.Repositories.InMemoryRepositories
                 Age = 33
             }
         };
-        public Guid Id { get; set; }
-        public PersonInMemoryRepository()
-        {
-            Id = Guid.NewGuid();
-        }
 
-        public IEnumerable<Person> GetAllUsers()
+        public IEnumerable<Person> GetAllPeople()
         {
             return _persons;
         }
@@ -37,19 +31,19 @@ namespace BookStore.DL.Repositories.InMemoryRepositories
         {
             return _persons.FirstOrDefault(u => u.Id == id);
         }
-        public Person? AddUser(Person person) 
+        public Person? AddPerson (Person person)
         {
             try
-            { 
+            {
                 _persons.Add(person);
             }
             catch (Exception ex)
             {
-                return null;                
-            }  
+                return null;
+            }
             return person;
         }
-        public Person? UpdateUser(Person person)
+        public Person? UpdatePerson(Person person)
         {
             var existingPerson = _persons.FirstOrDefault(u => u.Id == person.Id);
             if (existingPerson == null) return null;
@@ -57,16 +51,12 @@ namespace BookStore.DL.Repositories.InMemoryRepositories
             _persons.Add(person);
             return person;
         }
-        public Person? DeleteUserById(int id)
+        public Person? DeletePersonById(int id)
         {
             if (id <= 0) return null;
             var person = _persons.FirstOrDefault(u => u.Id == id);
             _persons.Remove(person);
             return person;
-        }
-        public Guid GetGuidId()
-        {
-            return Id;
         }
     }
 }

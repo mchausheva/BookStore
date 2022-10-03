@@ -11,25 +11,25 @@ namespace BookStore.BL.Services
         {
             _personRepository = personService;
         }
-        public IEnumerable<Person?> GetAllUsers()
+        public IEnumerable<Person?> GetAllPeople()
         {
-            return _personRepository.GetAllUsers();
+            return _personRepository.GetAllPeople();
         }
         public Person GetById(int id)
         {
             return _personRepository.GetById(id);
         }
-        public Person? AddUser(Person person)
+        public Person? AddPerson(Person person)
         {
-            return _personRepository.AddUser(person);
+            return _personRepository.AddPerson(person);
         }
-        public Person? UpdateUser(Person person)
+        public Person? DeletePersonById(int id)
         {
-            return _personRepository.UpdateUser(person);
+            return _personRepository.DeletePersonById(id);
         }
-        public Person? DeleteUserById(int id)
+        public Person? UpdatePerson(Person person)
         {
-            return _personRepository.DeleteUserById(id);
+            return _personRepository.UpdatePerson(person);
         }
     }
 }

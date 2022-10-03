@@ -1,20 +1,13 @@
-﻿using BookStore.Models;
-using BookStore.Models.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using BookStore.Models.Models;
 
 namespace BookStore.DL.Interfaces
 {
     public interface IPersonInMemoryRepository
     {
-        IEnumerable<Person> GetAllUsers();
+        IEnumerable<Person> GetAllPeople();
         Person GetById(int id);
-        Person? AddUser(Person user);
-        Person? UpdateUser(Person user);
-        Person? DeleteUserById(int id);
-        Guid GetGuidId();
+        Person? AddPerson(Person person);
+        Person? UpdatePerson(Person person);
+        Person? DeletePersonById(int id);
     }
 }

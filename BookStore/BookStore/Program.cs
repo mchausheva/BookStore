@@ -10,6 +10,8 @@ builder.Services.AddSingleton<IPersonInMemoryRepository, PersonInMemoryRepositor
 builder.Services.AddSingleton<IAuthorInMemoryRepository, AuthorInMemoryRepository>();
 builder.Services.AddSingleton<IBookInMemoryRepositry, BookInMemoryRepositry>();
 builder.Services.AddSingleton<IPersonService, PersonService>();
+builder.Services.AddSingleton<IAuthorService, AuthorService>();
+builder.Services.AddSingleton<IBookService, BookService>();
 
 
 builder.Services.AddControllers();
