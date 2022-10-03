@@ -3,7 +3,7 @@ using BookStore.Models.Models;
 
 namespace BookStore.DL.Repositories.InMemoryRepositories
 {
-    public class PersonInMemoryRepository : IPersonInMemoryRepository
+    public class PersonInMemoryRepository : IPersonRepository
     {
         private static List<Person> _persons = new List<Person>()
         {
@@ -31,7 +31,7 @@ namespace BookStore.DL.Repositories.InMemoryRepositories
         {
             return _persons.FirstOrDefault(u => u.Id == id);
         }
-        public Person? AddPerson (Person person)
+        public Person AddPerson (Person person)
         {
             try
             {
@@ -43,7 +43,7 @@ namespace BookStore.DL.Repositories.InMemoryRepositories
             }
             return person;
         }
-        public Person? UpdatePerson(Person person)
+        public Person UpdatePerson(Person person)
         {
             var existingPerson = _persons.FirstOrDefault(u => u.Id == person.Id);
             if (existingPerson == null) return null;
@@ -51,12 +51,17 @@ namespace BookStore.DL.Repositories.InMemoryRepositories
             _persons.Add(person);
             return person;
         }
-        public Person? DeletePersonById(int id)
+        public Person DeletePersonById(int id)
         {
             if (id <= 0) return null;
             var person = _persons.FirstOrDefault(u => u.Id == id);
             _persons.Remove(person);
             return person;
+        }
+
+        public Person GetByName(string name)
+        {
+            return _persons.FirstOrDefault(p => p.FirstName == name);
         }
     }
 }

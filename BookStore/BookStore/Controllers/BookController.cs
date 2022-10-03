@@ -1,6 +1,9 @@
 ﻿using BookStore.BL.Interfaces;
+using BookStore.BL.Services;
 using BookStore.Models.Models;
+using BookStore.Models.Requests;
 using Microsoft.AspNetCore.Mvc;
+using System.Net;
 
 namespace BookStore.Controllers
 {
@@ -15,30 +18,69 @@ namespace BookStore.Controllers
             _logger = logger;
             _bookService = bookService;
         }
-        [HttpGet(nameof(GetAllBook))]
-        public IEnumerable<Book> GetAllBook()
+
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [HttpGet(nameof(GetAllBooks))]
+        public IActionResult GetAllBooks()
         {
-            return _bookService.GetAllBook();
+            return Ok(_bookService.GetAllBooks());
         }
+
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpGet(nameof(GetById))]
-        public Book? GetById(int id)
+        public IActionResult GetById(int id)
         {
-            return _bookService.GetById(id);
+            if (id <= 0)
+            {
+                _logger.LogInformation("Id must be greater than 0");
+                return BadRequest($"Parameter id: {id} must be greater than 0");
+            }
+
+            var result = _bookService.GetById(id);
+
+            if (result == null) return NotFound(id);
+
+            return Ok(result);
         }
+
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpPost(nameof(AddMethod))]
-        public void AddMethod(Book book)
+        public IActionResult AddMethod([FromBody] AddBookRequest bookRequest)
         {
-            _bookService.AddBook(book);
+            var result = _bookService.AddBook(bookRequest);
+
+            if (result.HttpStatusCode == HttpStatusCode.BadRequest)
+                return BadRequest(result);
+
+            return Ok(result);
         }
+
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpPut(nameof(UpdateMethod))]
-        public void UpdateMethod(Book book)
+        public IActionResult UpdateMethod([FromBody] UpdateBookRequest bookRequest)
         {
-            _bookService.UpdateBook(book);
+            var result = _bookService.UpdateBook(bookRequest);
+
+            if (result.HttpStatusCode == HttpStatusCode.BadRequest)
+                return BadRequest(result);
+
+            return Ok(result);
         }
+
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpDelete(nameof(DeleteMethod))]
-        public Book? DeleteMethod(int id)
+        public IActionResult DeleteMethod(int id)
         {
-            return _bookService.DeleteBookById(id);
+            if (id > 0 && _bookService.GetById != null)
+            {
+                _bookService.DeleteBookById(id);
+                return Ok($"Person with id {id} is successfully deleted");
+            }
+            return BadRequest($"Book with id {id} is not deleted");
         }
     }
 }
