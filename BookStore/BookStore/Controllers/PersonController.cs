@@ -15,13 +15,11 @@ namespace BookStore.Controllers
             _logger = logger;
             _personService = personService;
         }
-
         [HttpGet(nameof(Get))]
         public IEnumerable<Person> Get()
         {
             return _personService.GetAllPeople();
         }
-
         [HttpGet(nameof(GetById))]
         public Person? GetById(int id)
         {
