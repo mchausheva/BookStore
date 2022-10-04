@@ -1,4 +1,6 @@
 using BookStore.Extentions;
+using FluentValidation.AspNetCore;
+using FluentValidation;
 using Serilog;
 using Serilog.Sinks.SystemConsole.Themes;
 
@@ -15,6 +17,9 @@ builder.Logging.AddSerilog(logger);
 builder.Services.RegisterRepositories()
                 .RegisterServices()
                 .AddAutoMapper(typeof(Program));
+
+builder.Services.AddFluentValidationAutoValidation().AddFluentValidationClientsideAdapters();
+builder.Services.AddValidatorsFromAssemblyContaining(typeof(Program));
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
