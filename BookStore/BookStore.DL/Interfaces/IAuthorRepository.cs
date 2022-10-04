@@ -11,5 +11,6 @@ namespace BookStore.DL.Interfaces
         Author AddAuthor(Author author);
         Author UpdateAuthor(Author author);
         Author DeleteAuthorById(int id);
+        bool AddMultipleAuthors(IEnumerable<Author> authorCollection);
     }
 }

@@ -1,10 +1,12 @@
 ﻿using BookStore.DL.Interfaces;
 using BookStore.Models.Models;
+using Microsoft.Extensions.Logging;
 
 namespace BookStore.DL.Repositories.InMemoryRepositories
 {
     public class AuthorInMemoryRepository : IAuthorRepository
     {
+        private readonly ILogger<AuthorInMemoryRepository> _logger;
         private static List<Author> _authors = new List<Author>()
         {
             new Author()
@@ -22,6 +24,11 @@ namespace BookStore.DL.Repositories.InMemoryRepositories
                 Nickname = "PEPI"
             }
         };
+        public AuthorInMemoryRepository(ILogger<AuthorInMemoryRepository> logger)
+        {
+            _logger = logger;
+        }
+
         public IEnumerable<Author> GetAllAuthors()
         {
             return _authors;
@@ -58,6 +65,20 @@ namespace BookStore.DL.Repositories.InMemoryRepositories
         public Author GetAuthorByNickname(string nickname)
         {
             return _authors.FirstOrDefault(a => a.Nickname == nickname);
+        }
+
+        public bool AddMultipleAuthors(IEnumerable<Author> authorCollection)
+        {
+            try
+            {
+                _authors.AddRange(authorCollection);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogWarning($"Unable to add multiple authors with message: {ex.Message}");
+                return false;
+            }
         }
     }
 }
