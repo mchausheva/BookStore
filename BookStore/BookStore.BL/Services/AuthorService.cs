@@ -5,6 +5,7 @@ using BookStore.Models.Models;
 using BookStore.Models.Requests;
 using BookStore.Models.Responses;
 using Microsoft.Extensions.Logging;
+using System.Collections.Generic;
 using System.Net;
 
 namespace BookStore.BL.Services
@@ -110,6 +111,11 @@ namespace BookStore.BL.Services
                 _logger.LogWarning($"The author can not be update");
                 throw;
             }
+        }
+
+        public bool AddMultipleAuthors(IEnumerable<Author> authorCollection)
+        {
+            return _authorRepository.AddMultipleAuthors(authorCollection);
         }
     }
 }
