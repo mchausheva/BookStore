@@ -9,7 +9,9 @@ namespace BookStore.AutoMapper
         public AutoMappings()
         {
             CreateMap<AddAuthorRequest, Author>();
+            CreateMap<UpdateAuthorRequest, Author>();
             CreateMap<AddBookRequest, Book>();
+            CreateMap<UpdateBookRequest, Book>();
             CreateMap<AddPersonRequest, Person>();
         }
     }

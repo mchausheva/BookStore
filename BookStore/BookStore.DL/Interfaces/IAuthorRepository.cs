@@ -4,13 +4,13 @@ namespace BookStore.DL.Interfaces
 {
     public interface IAuthorRepository
     {
-        IEnumerable<Author> GetAllAuthors();
-        Author GetById(int id);
-        Author GetAuthorByName(string name);
-        Author GetAuthorByNickname(string nickname);
-        Author AddAuthor(Author author);
-        Author UpdateAuthor(Author author);
-        Author DeleteAuthorById(int id);
-        bool AddMultipleAuthors(IEnumerable<Author> authorCollection);
+        public Task<IEnumerable<Author>> GetAllAuthors();
+        public Task<Author> GetById(int id);
+        public Task<Author> GetAuthorByName(string name);
+        public Task<Author> GetAuthorByNickname(string nickname);
+        public Task<Author> AddAuthor(Author author);
+        public Task<Author> UpdateAuthor(Author author);
+        public Task<Author> DeleteAuthorById(int id);
+        public Task<bool> AddMultipleAuthors(IEnumerable<Author> authorCollection);
     }
 }

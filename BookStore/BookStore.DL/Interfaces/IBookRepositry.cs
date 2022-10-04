@@ -4,11 +4,11 @@ namespace BookStore.DL.Interfaces
 {
     public interface IBookRepositry
     {
-        IEnumerable<Book> GetAllBooks();
-        Book GetById(int id);
-        Book GetByTitle(string title);
-        Book AddBook(Book book);
-        Book UpdateBook(Book book);
-        Book? DeleteBookById(int id);
+        public Task<IEnumerable<Book>> GetAllBooks();
+        public Task<Book> GetById(int id);
+        public Task<Book> GetByTitle(string title);
+        public Task<Book> AddBook(Book book);
+        public Task<Book> UpdateBook(Book book);
+        public Task<Book> DeleteBookById(int id);
     }
 }
