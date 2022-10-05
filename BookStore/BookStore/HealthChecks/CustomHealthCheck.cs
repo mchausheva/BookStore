@@ -10,7 +10,6 @@ namespace BookStore.HealthChecks
         {
             try
             {
-                throw new Exception("Random Error Caught!");
             }
             catch (Exception ex)
             {
