@@ -7,8 +7,9 @@ namespace BookStore.Validations
     {
         public MultipleAuthorsRequestValidator()
         {
-            RuleFor(x => x.AuthorRequests).NotEmpty();
-            RuleFor(x => x.Reason).MaximumLength(100);
+            RuleFor(x => x.AuthorRequests).NotEmpty()
+                                          .Must(x => x.Count() >= 2).WithMessage("There must be at least 2 authors.");
+            RuleFor(x => x.Reason).MaximumLength(150);
         }
     }
 }

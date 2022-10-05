@@ -137,7 +137,6 @@ namespace BookStore.DL.Repositories.MsSQL
                 {
                     await conn.OpenAsync();             
                    
-
                     var query = "UPDATE Authors SET Name = @Name, Age = @Age, DateOfBirth = @DateOfBirth, Nickname = @Nickname WHERE Id = @Id";
                     var result = await conn.ExecuteAsync(query, author);
 
@@ -158,14 +157,43 @@ namespace BookStore.DL.Repositories.MsSQL
                 await using (var conn = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
                 {
                     await conn.OpenAsync();
-                    return await conn.QueryFirstOrDefaultAsync<Author>("DELETE FROM Authors WHERE Id = @Id", new { Id = id });
+                    if (await AuthorBook(id))
+                    {
+                        _logger.LogInformation("This author has books and can not be deleted");
+                        return null;
+                    }
+                    else
+                    {
+                        return await conn.QueryFirstOrDefaultAsync<Author>("DELETE FROM Authors WHERE Id = @Id", new { Id = id });
+                    }
                 }
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Error in {nameof(DeleteAuthorById)} - {ex.Message}", ex);
+                return null;
             }
-            return null;
+        }
+
+        public async Task<bool> AuthorBook(int authorId)
+        {
+            try
+            {
+                await using (var conn = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
+                {
+                    await conn.OpenAsync();
+
+                    var books = await conn.QueryMultipleAsync("SELECT * FROM Books WITH(NOLOCK) WHERE AuthorId = @Id", new { Id = authorId });
+                    if (books != null) return true;
+
+                    return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error in {nameof(DeleteAuthorById)} - {ex.Message}", ex);
+                return false;
+            }
         }
     }
 }

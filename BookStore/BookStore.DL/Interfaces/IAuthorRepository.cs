@@ -12,5 +12,6 @@ namespace BookStore.DL.Interfaces
         public Task<Author> UpdateAuthor(Author author);
         public Task<Author> DeleteAuthorById(int id);
         public Task<bool> AddMultipleAuthors(IEnumerable<Author> authorCollection);
+        public Task<bool> AuthorBook(int authorId);
     }
 }

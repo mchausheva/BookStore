@@ -6,6 +6,7 @@ using BookStore.Models.Requests;
 using BookStore.Models.Responses;
 using Microsoft.Extensions.Logging;
 using System.Net;
+using System.Net.Http.Headers;
 
 namespace BookStore.BL.Services
 {
@@ -68,20 +69,22 @@ namespace BookStore.BL.Services
             {
                 var bookExist = await _bookRepository.GetById(bookRequest.Id);
                 if (bookExist == null)
+                {
                     return new UpdateBookResponse()
                     {
                         Book = bookExist,
                         HttpStatusCode = HttpStatusCode.BadRequest,
                         Message = "Not Updated"
                     };
+                }
 
                 var book = _mapper.Map<Book>(bookRequest);
-                var result = _bookRepository.UpdateBook(book);
+                var result = await _bookRepository.UpdateBook(book);
 
                 return new UpdateBookResponse()
                 {
                     HttpStatusCode = HttpStatusCode.OK,
-                    Book = await result,
+                    Book = result,
                     Message = "Successfully Updated Book"
                 };
             }

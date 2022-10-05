@@ -78,16 +78,20 @@ namespace BookStore.DL.Repositories.MsSQL
                 await using (var conn = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
                 {
                     await conn.OpenAsync();
-                    var query = "INSERT INTO Books (Title, AuthorId, Quantity, LastUpdated, Price) VALUES (@Title, @AuthorId, @Quantity, @LastUpdated, @Price)";
-                    var result = await conn.ExecuteAsync(query, book);
-                    return book;
+                    if (!await BookAuthor(book.AuthorId)) return null;
+                    else
+                    {
+                        var query = "INSERT INTO Books (Title, AuthorId, Quantity, LastUpdated, Price) VALUES (@Title, @AuthorId, @Quantity, @LastUpdated, @Price)";
+                        var result = await conn.ExecuteAsync(query, book);
+                        return book;
+                    }
                 }
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Error in {nameof(AddBook)} - {ex.Message}", ex);
-            }
-            return null;
+                return null;
+            }            
         }
 
         public async Task<Book> UpdateBook(Book book)
@@ -98,8 +102,8 @@ namespace BookStore.DL.Repositories.MsSQL
                 {
                     await conn.OpenAsync();
 
-                    var query = @"UPDATE Books SET Title = @Title, AuthorId = @AuthorId, Quantity = @Quality, LastUpdated = @LastUpdated, Price = @Price WHERE Id = @Id";
-                    await conn.ExecuteAsync(query, book);
+                    var query = @"UPDATE Books SET Title = @Title, AuthorId = @AuthorId, Quantity = @Quantity, LastUpdated = @LastUpdated, Price = @Price WHERE Id = @Id";
+                    var result = await conn.ExecuteAsync(query, book);
 
                     return book;
                 }
@@ -107,8 +111,8 @@ namespace BookStore.DL.Repositories.MsSQL
             catch (Exception ex)
             {
                 _logger.LogError($"Error in {nameof(UpdateBook)} - {ex.Message}", ex);
+                return null;
             }
-            return null;
         }
 
         public async Task<Book> DeleteBookById(int id)
@@ -126,6 +130,27 @@ namespace BookStore.DL.Repositories.MsSQL
                 _logger.LogError($"Error in {nameof(DeleteBookById)} - {ex.Message}", ex);
             }
             return null;
+        }
+
+        public async Task<bool> BookAuthor (int authorId)
+        {
+            try
+            {
+                await using (var conn = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
+                {
+                    await conn.OpenAsync();
+
+                    var author = await conn.QueryMultipleAsync("SELECT * FROM Authors WITH(NOLOCK) WHERE Id = @AuthorId", new { AuthorId = authorId });
+                    if (author != null) return true;
+
+                    return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error in {nameof(DeleteBookById)} - {ex.Message}", ex);
+                return false;
+            }
         }
     }
 }

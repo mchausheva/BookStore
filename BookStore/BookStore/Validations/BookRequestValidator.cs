@@ -11,6 +11,7 @@ namespace BookStore.Validations
                                 .MinimumLength(3)
                                 .MaximumLength(60);
             RuleFor(x => x.AuthorId).NotEmpty();
+            RuleFor(x => x.Quantity).NotEmpty();
         }
     }
 }
