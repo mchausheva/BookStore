@@ -1,11 +1,9 @@
 ﻿using BookStore.DL.Interfaces;
 using BookStore.Models.Models;
 using Dapper;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System.Data.SqlClient;
-using System.Reflection;
 
 namespace BookStore.DL.Repositories.MsSQL
 {
