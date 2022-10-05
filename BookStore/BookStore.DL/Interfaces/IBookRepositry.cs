@@ -10,5 +10,6 @@ namespace BookStore.DL.Interfaces
         public Task<Book> AddBook(Book book);
         public Task<Book> UpdateBook(Book book);
         public Task<Book> DeleteBookById(int id);
+        public Task<bool> BookAuthor(int authorId);
     }
 }
