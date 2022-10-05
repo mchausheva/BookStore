@@ -1,11 +1,6 @@
 using BookStore.Extentions;
-<<<<<<< Updated upstream
-using FluentValidation.AspNetCore;
-using FluentValidation;
-=======
 using FluentValidation;
 using FluentValidation.AspNetCore;
->>>>>>> Stashed changes
 using Serilog;
 using Serilog.Sinks.SystemConsole.Themes;
 
@@ -23,12 +18,8 @@ builder.Services.RegisterRepositories()
                 .RegisterServices()
                 .AddAutoMapper(typeof(Program));
 
-<<<<<<< Updated upstream
-builder.Services.AddFluentValidationAutoValidation().AddFluentValidationClientsideAdapters();
-=======
 builder.Services.AddFluentValidationAutoValidation()
                 .AddFluentValidationClientsideAdapters();
->>>>>>> Stashed changes
 builder.Services.AddValidatorsFromAssemblyContaining(typeof(Program));
 
 builder.Services.AddControllers();

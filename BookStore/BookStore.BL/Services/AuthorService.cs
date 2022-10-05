@@ -22,11 +22,11 @@ namespace BookStore.BL.Services
             _logger = logger;
         }
 
-        public AddAuthorResponse AddAuthor(AddAuthorRequest authorRequest)
+        public async Task<AddAuthorResponse> AddAuthor(AddAuthorRequest authorRequest)
         {
             try
             {
-                var auth = _authorRepository.GetAuthorByName(authorRequest.Name);
+                var auth = await _authorRepository.GetById(authorRequest.Id);
                 if (auth != null)
                     return new AddAuthorResponse()
                     {
@@ -36,7 +36,7 @@ namespace BookStore.BL.Services
                     };
 
                 var author = _mapper.Map<Author>(authorRequest);
-                var result = _authorRepository.AddAuthor(author);
+                var result = await _authorRepository.AddAuthor(author);
 
                 return new AddAuthorResponse()
                 {
@@ -52,52 +52,47 @@ namespace BookStore.BL.Services
             }
         }
 
-        public Author DeleteAuthorById(int id)
+        public async Task<IEnumerable<Author>> GetAllAuthors()
         {
             _logger.LogInformation("Success");
-            return _authorRepository.DeleteAuthorById(id);
+            return await _authorRepository.GetAllAuthors();
         }
 
-        public IEnumerable<Author> GetAllAuthors()
+        public async Task<Author> GetAuthorByName(string name)
         {
             _logger.LogInformation("Success");
-            return _authorRepository.GetAllAuthors();
+            return await _authorRepository.GetAuthorByName(name);
         }
 
-        public Author GetAuthorByName(string name)
+        public async Task<Author> GetAuthorByNickname(string nickname)
         {
             _logger.LogInformation("Success");
-            return _authorRepository.GetAuthorByName(name);
+            return await _authorRepository.GetAuthorByNickname(nickname);
         }
 
-        public Author GetAuthorByNickname(string nickname)
+        public async Task<Author> GetById(int id)
         {
             _logger.LogInformation("Success");
-            return _authorRepository.GetAuthorByNickname(nickname);
+            return await _authorRepository.GetById(id);
         }
 
-        public Author GetById(int id)
-        {
-            _logger.LogInformation("Success");
-            return _authorRepository.GetById(id);
-        }
-
-        public UpdateAuthorResponse UpdateAuthor(UpdateAuthorRequest authorRequest)
+        public async Task<UpdateAuthorResponse> UpdateAuthor (UpdateAuthorRequest authorRequest)
         {
             try
             {
-
-                var auth = _authorRepository.GetAuthorByName(authorRequest.Name);
+                var auth = await _authorRepository.GetById(authorRequest.Id);
                 if (auth == null)
+                {
                     return new UpdateAuthorResponse()
                     {
                         Author = auth,
                         HttpStatusCode = HttpStatusCode.BadRequest,
                         Message = "Not Updated"
                     };
+                }
 
-                var author = _mapper.Map<Author>(auth);
-                var result = _authorRepository.UpdateAuthor(author);
+                var author = _mapper.Map<Author>(authorRequest);
+                var result = await _authorRepository.UpdateAuthor(author);
 
                 return new UpdateAuthorResponse()
                 {
@@ -113,9 +108,15 @@ namespace BookStore.BL.Services
             }
         }
 
-        public bool AddMultipleAuthors(IEnumerable<Author> authorCollection)
+        public async Task<Author> DeleteAuthorById(int id)
         {
-            return _authorRepository.AddMultipleAuthors(authorCollection);
+            _logger.LogInformation("Success");
+            return await _authorRepository.DeleteAuthorById(id);
+        }
+
+        public async Task<bool> AddMultipleAuthors(IEnumerable<Author> authorCollection)
+        {
+            return await _authorRepository.AddMultipleAuthors(authorCollection);
         }
     }
 }

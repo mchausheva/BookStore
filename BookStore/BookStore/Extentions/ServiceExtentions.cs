@@ -2,6 +2,7 @@
 using BookStore.BL.Services;
 using BookStore.DL.Interfaces;
 using BookStore.DL.Repositories.InMemoryRepositories;
+using BookStore.DL.Repositories.MsSQL;
 
 namespace BookStore.Extentions
 {
@@ -10,8 +11,8 @@ namespace BookStore.Extentions
         public static IServiceCollection RegisterRepositories(this IServiceCollection services)
         {
             services.AddSingleton<IPersonRepository, PersonInMemoryRepository>();
-            services.AddSingleton<IAuthorRepository, AuthorInMemoryRepository>();
-            services.AddSingleton<IBookRepositry, BookInMemoryRepositry>();
+            services.AddSingleton<IAuthorRepository, AuthorMsSqlRepository>();
+            services.AddSingleton<IBookRepositry, BookMsSqlRepository>();
 
             return services;
         }

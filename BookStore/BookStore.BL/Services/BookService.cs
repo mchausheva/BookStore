@@ -6,6 +6,7 @@ using BookStore.Models.Requests;
 using BookStore.Models.Responses;
 using Microsoft.Extensions.Logging;
 using System.Net;
+using System.Net.Http.Headers;
 
 namespace BookStore.BL.Services
 {
@@ -21,11 +22,11 @@ namespace BookStore.BL.Services
             _logger = logger;
         }
 
-        public AddBookResponse AddBook(AddBookRequest bookRequest)
+        public async Task<AddBookResponse> AddBook(AddBookRequest bookRequest)
         {
             try
             {
-                var bookExist = _bookRepository.GetByTitle(bookRequest.Title);
+                var bookExist = await _bookRepository.GetById(bookRequest.Id);
                 if (bookExist != null)
                     return new AddBookResponse()
                     {
@@ -34,8 +35,8 @@ namespace BookStore.BL.Services
                         Message = "This Book Already Exist!"
                     };
 
-                var book = _mapper.Map<Book>(bookExist);
-                var result = _bookRepository.AddBook(book);
+                var book = _mapper.Map<Book>(bookRequest);
+                var result = await _bookRepository.AddBook(book);
 
                 return new AddBookResponse()
                 {
@@ -51,37 +52,34 @@ namespace BookStore.BL.Services
             }
         }
 
-        public Book DeleteBookById(int id)
-        {
-            return _bookRepository.DeleteBookById(id);
-        }
-
-        public IEnumerable<Book> GetAllBooks()
+        public async Task<IEnumerable<Book>> GetAllBooks()
         {
             _logger.LogInformation("Success");
-            return _bookRepository.GetAllBooks();
+            return await _bookRepository.GetAllBooks();
         }
 
-        public Book GetById(int id)
+        public async Task<Book> GetById(int id)
         {
-            return _bookRepository.GetById(id);
+            return await _bookRepository.GetById(id);
         }
 
-        public UpdateBookResponse UpdateBook(UpdateBookRequest bookRequest)
+        public async Task<UpdateBookResponse> UpdateBook(UpdateBookRequest bookRequest)
         {
             try
             {
-                var bookExist = _bookRepository.GetById(bookRequest.Id);
+                var bookExist = await _bookRepository.GetById(bookRequest.Id);
                 if (bookExist == null)
+                {
                     return new UpdateBookResponse()
                     {
                         Book = bookExist,
                         HttpStatusCode = HttpStatusCode.BadRequest,
                         Message = "Not Updated"
                     };
+                }
 
-                var book = _mapper.Map<Book>(bookExist);
-                var result = _bookRepository.UpdateBook(book);
+                var book = _mapper.Map<Book>(bookRequest);
+                var result = await _bookRepository.UpdateBook(book);
 
                 return new UpdateBookResponse()
                 {
@@ -95,6 +93,11 @@ namespace BookStore.BL.Services
                 _logger.LogWarning($"The book can not be update");
                 throw;
             }
+        }
+
+        public async Task<Book> DeleteBookById(int id)
+        {
+            return await _bookRepository.DeleteBookById(id);
         }
     }
 }
