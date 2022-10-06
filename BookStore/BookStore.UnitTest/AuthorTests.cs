@@ -9,7 +9,6 @@ using BookStore.Models.Responses;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Moq;
-using System.Net;
 
 namespace BookStore.UnitTest
 {
