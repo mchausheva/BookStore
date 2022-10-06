@@ -90,15 +90,16 @@ namespace BookStore.Controllers
 
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [HttpDelete(nameof(DeleteMethod))]
         public async Task<IActionResult> DeleteMethod(int id)
         {
-            if (id > 0 && _authorService.GetById != null)
+            if (id > 0 && await _authorService.GetById(id) != null)
             {
-                await _authorService.DeleteAuthorById(id);
-                return Ok($"Author with id {id} is successfully deleted");
+                var result = await _authorService.DeleteAuthorById(id);
+                return Ok(result);
             }
-            return BadRequest($"Author with id {id} is not deleted");
+            return NotFound(id);
         }
     }
 }

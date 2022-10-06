@@ -1,4 +1,5 @@
 ﻿using BookStore.BL.Interfaces;
+using BookStore.BL.Services;
 using BookStore.Models.Requests;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
@@ -70,15 +71,16 @@ namespace BookStore.Controllers
 
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [HttpDelete(nameof(DeleteMethod))]
         public async Task<IActionResult> DeleteMethod(int id)
         {
-            if (id > 0 && _bookService.GetById != null)
+            if (id > 0 && await _bookService.GetById(id) != null)
             {
-                await _bookService.DeleteBookById(id);
-                return Ok($"Person with id {id} is successfully deleted");
+                var result = await _bookService.DeleteBookById(id);
+                return Ok(result);
             }
-            return BadRequest($"Book with id {id} is not deleted");
+            return NotFound(id);
         }
     }
 }
