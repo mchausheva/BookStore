@@ -283,6 +283,7 @@ namespace BookStore.UnitTest
 
             var book = okObjectResult.Value as Book;
             Assert.NotNull(book);
+            Assert.Equal(bookId, book.Id);
         }
         [Fact]
         public async Task Book_DeleteBook_NotOk()
