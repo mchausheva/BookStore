@@ -128,8 +128,8 @@ namespace BookStore.DL.Repositories.MsSQL
             catch (Exception ex)
             {
                 _logger.LogError($"Error in {nameof(DeleteBookById)} - {ex.Message}", ex);
+                return null;
             }
-            return null;
         }
 
         public async Task<bool> BookAuthor (int authorId)

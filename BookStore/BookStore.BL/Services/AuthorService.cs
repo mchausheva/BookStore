@@ -26,7 +26,7 @@ namespace BookStore.BL.Services
         {
             try
             {
-                var auth = await _authorRepository.GetById(authorRequest.Id);
+                var auth = await _authorRepository.GetAuthorByName(authorRequest.Name);
                 if (auth != null)
                     return new AddAuthorResponse()
                     {
@@ -80,7 +80,7 @@ namespace BookStore.BL.Services
         {
             try
             {
-                var auth = await _authorRepository.GetById(authorRequest.Id);
+                var auth = await _authorRepository.GetAuthorByName(authorRequest.Name);
                 if (auth == null)
                 {
                     return new UpdateAuthorResponse()
