@@ -12,10 +12,10 @@ namespace BookStore.BL.Services
 {
     public class BookService : IBookService
     {
-        private readonly IBookRepositry _bookRepository;
+        private readonly IBookRepository _bookRepository;
         private readonly IMapper _mapper;
         private readonly ILogger<BookService> _logger;
-        public BookService(IBookRepositry bookRepository, IMapper mapper, ILogger<BookService> logger)
+        public BookService(IBookRepository bookRepository, IMapper mapper, ILogger<BookService> logger)
         {
             _bookRepository = bookRepository;
             _mapper = mapper;

@@ -8,7 +8,7 @@ namespace BookStore.BL.Interfaces
     {
         public Task<IEnumerable<Book>> GetAllBooks();
         public Task<Book> GetById(int id);
-        public Task<AddBookResponse> AddBook(AddBookRequest bookRequest);
+        public Task<AddBookResponse> AddBook(AddBookRequest addBookReques);
         public Task<UpdateBookResponse> UpdateBook(UpdateBookRequest bookRequest);
         public Task<Book> DeleteBookById(int id);
     }

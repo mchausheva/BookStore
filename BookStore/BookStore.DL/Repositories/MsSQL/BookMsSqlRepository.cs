@@ -7,7 +7,7 @@ using System.Data.SqlClient;
 
 namespace BookStore.DL.Repositories.MsSQL
 {
-    public class BookMsSqlRepository : IBookRepositry
+    public class BookMsSqlRepository : IBookRepository
     {
         private readonly ILogger<AuthorMsSqlRepository> _logger;
         private readonly IConfiguration _configuration;
@@ -48,8 +48,8 @@ namespace BookStore.DL.Repositories.MsSQL
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Error in {nameof(GetById)} - {ex.Message}", ex);
-            }
+                _logger.LogError($"Error in {nameof(GetById)} - {ex.Message}", ex);                
+            }            
             return new Book();
         }
 
