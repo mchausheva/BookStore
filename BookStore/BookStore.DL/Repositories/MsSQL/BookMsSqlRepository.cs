@@ -35,7 +35,7 @@ namespace BookStore.DL.Repositories.MsSQL
             return Enumerable.Empty<Book>();
         }
 
-        public async Task<Book> GetById(int id)
+        public async Task<Book?> GetById(int id)
         {
             try
             {
@@ -115,7 +115,7 @@ namespace BookStore.DL.Repositories.MsSQL
             }
         }
 
-        public async Task<Book> DeleteBookById(int id)
+        public async Task<Book?> DeleteBookById(int id)
         {
             try
             {

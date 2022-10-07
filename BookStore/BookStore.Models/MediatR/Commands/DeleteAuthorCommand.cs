@@ -5,5 +5,6 @@ namespace BookStore.Models.MediatR.Commands
 {
     public record DeleteAuthorCommand(int authorId) : IRequest<Author>
     {
+        public int AuthorId = authorId;
     }
 }

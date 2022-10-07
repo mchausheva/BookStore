@@ -16,7 +16,7 @@ namespace BookStore.BL.CommandHandlers
 
         public async Task<Book> Handle(DeleteBookCommand request, CancellationToken cancellationToken)
         {
-            return await _bookRepository.DeleteBookById(request.bookId);
+            return await _bookRepository.DeleteBookById(request.BookId);
         }
     }
 }

@@ -36,7 +36,7 @@ namespace BookStore.DL.Repositories.MsSQL
             return Enumerable.Empty<Author>();
         }
 
-        public async Task<Author> GetById(int id)
+        public async Task<Author?> GetById(int id)
         {
             try
             {
@@ -148,22 +148,14 @@ namespace BookStore.DL.Repositories.MsSQL
             return null;
         }
 
-        public async Task<Author> DeleteAuthorById(int id)
+        public async Task<Author?> DeleteAuthorById(int id)
         {
             try
             {
                 await using (var conn = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
                 {
                     await conn.OpenAsync();
-                    if (await AuthorBook(id))
-                    {
-                        _logger.LogInformation("This author has books and can not be deleted");
-                        return null;
-                    }
-                    else
-                    {
-                        return await conn.QueryFirstOrDefaultAsync<Author>("DELETE FROM Authors WHERE Id = @Id", new { Id = id });
-                    }
+                    return await conn.QueryFirstOrDefaultAsync<Author>("DELETE FROM Authors WHERE Id = @Id", new { Id = id });
                 }
             }
             catch (Exception ex)
