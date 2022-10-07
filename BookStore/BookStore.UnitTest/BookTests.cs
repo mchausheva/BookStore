@@ -36,7 +36,7 @@ namespace BookStore.UnitTest
         private readonly IMapper _mapper;
         private readonly Mock<ILogger<BookService>> _loggerMock;
         private readonly Mock<ILogger<BookController>> _loggerBookControllerMock;
-        private readonly Mock<IBookRepositry> _bookRepositoryMock;
+        private readonly Mock<IBookRepository> _bookRepositoryMock;
         public BookTests()
         {
             var mockMapperConfig = new MapperConfiguration(cfg =>
@@ -47,7 +47,7 @@ namespace BookStore.UnitTest
 
             _loggerMock = new Mock<ILogger<BookService>>();
             _loggerBookControllerMock = new Mock<ILogger<BookController>>();
-            _bookRepositoryMock = new Mock<IBookRepositry>();
+            _bookRepositoryMock = new Mock<IBookRepository>();
         }
 
         [Fact]

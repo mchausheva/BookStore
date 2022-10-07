@@ -12,7 +12,7 @@ namespace BookStore.Extentions
         {
             services.AddSingleton<IPersonRepository, PersonInMemoryRepository>();
             services.AddSingleton<IAuthorRepository, AuthorMsSqlRepository>();
-            services.AddSingleton<IBookRepositry, BookMsSqlRepository>();
+            services.AddSingleton<IBookRepository, BookMsSqlRepository>();
 
             return services;
         }

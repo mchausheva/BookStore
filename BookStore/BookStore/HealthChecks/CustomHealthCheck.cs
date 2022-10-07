@@ -1,6 +1,4 @@
-﻿using BookStore.DL.Interfaces;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
-using System.Data.SqlClient;
+﻿using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace BookStore.HealthChecks
 {

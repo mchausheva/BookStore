@@ -1,7 +1,9 @@
+using BookStore.BL.CommandHandlers;
 using BookStore.Extentions;
 using BookStore.HealthChecks;
 using FluentValidation;
 using FluentValidation.AspNetCore;
+using MediatR;
 using Serilog;
 using Serilog.Sinks.SystemConsole.Themes;
 
@@ -32,6 +34,8 @@ builder.Services.AddHealthChecks()
                 .AddCheck<SqlHealthCkeck>("SQL Server")
                 .AddUrlGroup(new Uri("https://google.bg"), name: "Google Service")
                 .AddCheck<CustomHealthCheck>("Randomm");
+
+builder.Services.AddMediatR(typeof(GetAllBooksCommandHandler).Assembly);
 
 var app = builder.Build();
 
