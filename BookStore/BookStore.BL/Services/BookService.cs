@@ -6,7 +6,6 @@ using BookStore.Models.Requests;
 using BookStore.Models.Responses;
 using Microsoft.Extensions.Logging;
 using System.Net;
-using System.Net.Http.Headers;
 
 namespace BookStore.BL.Services
 {

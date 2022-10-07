@@ -1,5 +1,4 @@
-﻿using BookStore.BL.Interfaces;
-using BookStore.DL.Interfaces;
+﻿using BookStore.DL.Interfaces;
 using BookStore.Models.MediatR.Commands;
 using BookStore.Models.Models;
 using MediatR;

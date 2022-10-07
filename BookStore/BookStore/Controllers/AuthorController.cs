@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using BookStore.BL.CommandHandlers;
 using BookStore.BL.Interfaces;
 using BookStore.Models.MediatR.Commands;
 using BookStore.Models.Models;
@@ -30,7 +29,6 @@ namespace BookStore.Controllers
         [HttpGet(nameof(GetAllAuthors))]
         public async Task< IActionResult> GetAllAuthors()
         {
-            //return Ok(await _authorService.GetAllAuthors());
             return Ok(await _mediator.Send(new GetAllAuthorsCommand()));
         }
 
@@ -44,8 +42,7 @@ namespace BookStore.Controllers
 
             var authorCollection = _mapper.Map<IEnumerable<Author>>(addMultipleAuthors.AuthorRequests);
             var result = await _mediator.Send(new AddmultipleAuthorsCommand(authorCollection));
-            //var result = await _authorService.AddMultipleAuthors(authorCollection);
-
+            
             if (!result) return BadRequest(result);
 
             return Ok(result);
@@ -63,7 +60,6 @@ namespace BookStore.Controllers
                 return BadRequest($"Parameter id: {id} must be greater than 0");
             }
 
-            //var result = await _authorService.GetById(id);
             var result = await _mediator.Send(new GetAuthorByIdCommand(id));
 
             if (result == null) return NotFound(id);
@@ -76,7 +72,6 @@ namespace BookStore.Controllers
         [HttpPost(nameof(AddMethod))]
         public async Task<IActionResult> AddMethod([FromBody] AddAuthorRequest authorRequest)
         {
-            //var result = await _authorService.AddAuthor(authorRequest);
             var result = await _mediator.Send(new AddAuthorCommand(authorRequest));
 
             if (result.HttpStatusCode == HttpStatusCode.BadRequest)
@@ -90,7 +85,6 @@ namespace BookStore.Controllers
         [HttpPut(nameof(UpdateMethod))]
         public async Task<IActionResult> UpdateMethod([FromBody] UpdateAuthorRequest authorRequest)
         {
-            //var result = await _authorService.UpdateAuthor(authorRequest);
             var result = await _mediator.Send(new UpdateAuthorCommand(authorRequest));
 
             if (result.HttpStatusCode == HttpStatusCode.BadRequest)
@@ -107,7 +101,6 @@ namespace BookStore.Controllers
         {
             if (id > 0 && await _authorService.GetById(id) != null)
             {
-                //var result = await _authorService.DeleteAuthorById(id);
                 var result = await _mediator.Send(new DeleteAuthorCommand(id));
 
                 return Ok(result);

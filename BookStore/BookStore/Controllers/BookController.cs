@@ -1,6 +1,4 @@
-﻿using BookStore.BL.CommandHandlers;
-using BookStore.BL.Interfaces;
-using BookStore.BL.Services;
+﻿using BookStore.BL.Interfaces;
 using BookStore.Models.MediatR.Commands;
 using BookStore.Models.Requests;
 using MediatR;
@@ -28,7 +26,6 @@ namespace BookStore.Controllers
         public async Task<IActionResult> GetAllBooks()
         {
             return Ok(await _mediator.Send(new GetAllBooksCommand()));
-            //return Ok(await _bookService.GetAllBooks());
         }
 
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -42,7 +39,6 @@ namespace BookStore.Controllers
                 return BadRequest($"Parameter id: {id} must be greater than 0");
             }
 
-            //var result = await _bookService.GetById(id);
             var result = await _mediator.Send(new GetBookByIdCommand(id));
 
             if (result == null) return NotFound(id);
@@ -55,7 +51,6 @@ namespace BookStore.Controllers
         [HttpPost(nameof(AddMethod))]
         public async Task<IActionResult> AddMethod([FromBody] AddBookRequest bookRequest)
         {
-            //var result = await _bookService.AddBook(bookRequest);
             var result = await _mediator.Send(new AddBookCommand(bookRequest));
 
             if (result.HttpStatusCode == HttpStatusCode.BadRequest)
@@ -69,7 +64,6 @@ namespace BookStore.Controllers
         [HttpPut(nameof(UpdateMethod))]
         public async Task<IActionResult> UpdateMethod([FromBody] UpdateBookRequest bookRequest)
         {
-            //var result = await _bookService.UpdateBook(bookRequest);
             var result = await _mediator.Send(new UpdateBookCommand(bookRequest));
 
             if (result.HttpStatusCode == HttpStatusCode.BadRequest)
@@ -86,7 +80,6 @@ namespace BookStore.Controllers
         {
             if (id > 0 && await _bookService.GetById(id) != null)
             {
-                //var result = await _bookService.DeleteBookById(id);
                 var result = await _mediator.Send(new DeleteBookCommand(id));
                 return Ok(result);
             }
