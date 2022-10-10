@@ -1,5 +1,5 @@
 using BookStore.BL.CommandHandlers;
-using BookStore.DL.Repositories;
+using BookStore.DL.Repositories.MsSQL;
 using BookStore.Extentions;
 using BookStore.HealthChecks;
 using BookStore.Middleware;
@@ -58,6 +58,15 @@ builder.Services.AddSwaggerGen(x =>
         {jwtSecurityScheme, Array.Empty<string>() }
     });
 });
+
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("Admin", policy =>
+    {
+        policy.RequireClaim("Admin");
+    });
+});
+
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
                 {
@@ -78,9 +87,11 @@ builder.Services.AddHealthChecks()
                 .AddUrlGroup(new Uri("https://google.bg"), name: "Google Service")
                 .AddCheck<CustomHealthCheck>("Randomm");
 
-builder.Services.AddIdentity<UserInfo, UserRole>().AddUserStore<UserInfoStore>();
-
 builder.Services.AddMediatR(typeof(GetAllBooksCommandHandler).Assembly);
+
+builder.Services.AddIdentity<UserInfo, UserRole>()
+                .AddUserStore<UserInfoStore>()
+                .AddRoleStore<UserRoleStore>();
 
 var app = builder.Build();
 

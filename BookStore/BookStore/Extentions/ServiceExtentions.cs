@@ -1,7 +1,6 @@
 ﻿using BookStore.BL.Interfaces;
 using BookStore.BL.Services;
 using BookStore.DL.Interfaces;
-using BookStore.DL.Repositories;
 using BookStore.DL.Repositories.InMemoryRepositories;
 using BookStore.DL.Repositories.MsSQL;
 
@@ -25,6 +24,7 @@ namespace BookStore.Extentions
             services.AddSingleton<IAuthorService, AuthorService>();
             services.AddSingleton<IBookService, BookService>();
             services.AddSingleton<IEmployeeService, EmployeeService>();
+            services.AddTransient<IIdentityService, IdentityService>();
 
             return services;
         }

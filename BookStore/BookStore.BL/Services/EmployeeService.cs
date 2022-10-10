@@ -27,9 +27,9 @@ namespace BookStore.BL.Services
             return await _employeeRpository.GetEmployeeDetails(id);
         }
 
-        public Task<UserInfo?> GetUserInfoAsync(string email, string password)
+        public async Task<UserInfo?> GetUserInfoAsync(string email, string password)
         {
-            return _userInfoRepository.GetUserInfoAsync(email, password);
+            return await _userInfoRepository.GetUserInfoAsync(email, password);
         }
 
         public async Task AddEmployee(Employee employee)

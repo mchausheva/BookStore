@@ -6,7 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System.Data.SqlClient;
 
-namespace BookStore.DL.Repositories
+namespace BookStore.DL.Repositories.MsSQL
 {
     public class UserInfoRepository : IUserInfoRepository
     {
@@ -26,7 +26,7 @@ namespace BookStore.DL.Repositories
                     await conn.OpenAsync();
 
                     return await conn.QueryFirstOrDefaultAsync<UserInfo>("SELECT * FROM UserInfo WITH(NOLOCK) WHERE Email = @Email AND Password = @Password",
-                                                                        new {Email = email, Password = password});
+                                                                        new { Email = email, Password = password });
                 }
             }
             catch (Exception ex)

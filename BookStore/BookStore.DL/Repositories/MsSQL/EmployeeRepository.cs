@@ -6,7 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System.Data.SqlClient;
 
-namespace BookStore.DL.Repositories
+namespace BookStore.DL.Repositories.MsSQL
 {
     public class EmployeeRepository : IEmployeeRpository
     {
@@ -101,7 +101,7 @@ namespace BookStore.DL.Repositories
 
         public async Task<bool> CheckEmployee(int id)
         {
-            return (await GetEmployeeDetails(id) != null);
+            return await GetEmployeeDetails(id) != null;
         }
 
         public async Task DeleteEmployee(int id)
@@ -119,7 +119,7 @@ namespace BookStore.DL.Repositories
                 _logger.LogError($"Error in {nameof(DeleteEmployee)} - {ex.Message}", ex);
             }
         }
-        
+
         public async Task UpdateEmployee(Employee employee)
         {
             try
