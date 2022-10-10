@@ -2,6 +2,7 @@
 using BookStore.Models.MediatR.Commands;
 using BookStore.Models.Requests;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 
@@ -21,6 +22,8 @@ namespace BookStore.Controllers
             _mediator = mediator;
         }
 
+        [Authorize(AuthenticationSchemes = "Bearer")]
+        [Authorize(Roles = "Admin")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [HttpGet(nameof(GetAllBooks))]
         public async Task<IActionResult> GetAllBooks()
@@ -28,6 +31,8 @@ namespace BookStore.Controllers
             return Ok(await _mediator.Send(new GetAllBooksCommand()));
         }
 
+        [Authorize(AuthenticationSchemes = "Bearer")]
+        [Authorize(Roles = "User")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpGet(nameof(GetById))]

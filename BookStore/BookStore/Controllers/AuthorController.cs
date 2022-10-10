@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using BookStore.BL.Interfaces;
+using BookStore.Middleware;
 using BookStore.Models.MediatR.Commands;
 using BookStore.Models.Models;
 using BookStore.Models.Requests;
