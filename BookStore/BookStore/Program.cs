@@ -1,3 +1,4 @@
+using BookStore.BL.Background;
 using BookStore.BL.CommandHandlers;
 using BookStore.DL.Repositories.MsSQL;
 using BookStore.Extentions;
@@ -93,6 +94,10 @@ builder.Services.AddIdentity<UserInfo, UserRole>()
                 .AddUserStore<UserInfoStore>()
                 .AddRoleStore<UserRoleStore>();
 
+builder.Services.AddHostedService<MyBackgroundService>();
+
+
+//App builder below
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
