@@ -28,7 +28,7 @@ namespace BookStore.BL.Background
                 $"{nameof(MyBackgroundService)} is working  ->  {DateTime.Now.ToString("F", CultureInfo.CreateSpecificCulture("en-US"))}");
         }
 
-        public async Task StopAsync(CancellationToken cancellationToken)
+        public Task StopAsync(CancellationToken cancellationToken)
         {
             _logger.LogInformation($"Stop {nameof(MyBackgroundService)} {DateTime.Now.ToString("F", CultureInfo.CreateSpecificCulture("en-US"))}");
             _timer.Change(Timeout.Infinite, 0);
