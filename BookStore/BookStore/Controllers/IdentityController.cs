@@ -1,8 +1,10 @@
 ﻿using BookStore.BL.Interfaces;
+using BookStore.Models.Configuration;
 using BookStore.Models.Models.Users;
 using BookStore.Models.Requests;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -17,10 +19,12 @@ namespace BookStore.Controllers
     {
         private readonly IConfiguration _configuration;
         private readonly IIdentityService _identityService;
-        public IdentityController(IConfiguration configuration, IIdentityService identityService)
+        private readonly IOptions<MyJsonSettings> _jsonSettings;
+        public IdentityController(IConfiguration configuration, IIdentityService identityService, IOptions<MyJsonSettings> options)
         {
             _configuration = configuration;
             _identityService = identityService;
+            _jsonSettings = options;
         }
 
         [AllowAnonymous]
