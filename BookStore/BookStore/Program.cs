@@ -106,7 +106,7 @@ builder.Services.AddIdentity<UserInfo, UserRole>()
                 .AddRoleStore<UserRoleStore>();
 
 //builder.Services.AddHostedService<MyBackgroundService>();
-builder.Services.AddHostedService<ConsumerHostedService<int, int>>();
+//builder.Services.AddHostedService<ConsumerHostedService<int, int>>();
 
 //App builder below
 var app = builder.Build();

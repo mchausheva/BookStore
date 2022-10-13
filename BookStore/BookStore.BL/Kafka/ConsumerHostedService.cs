@@ -37,15 +37,15 @@ namespace BookStore.BL.Kafka
 
             _consumerBuilder.Subscribe(_topicName);
 
-            var t = Task.Run(() =>
+            Task.Run(() =>
             {
-                while (true)
+                while (!cancellationToken.IsCancellationRequested)
                 {
                     var cr = _consumerBuilder.Consume();
 
                     Console.WriteLine($"Received msg with Key: [{cr.Message.Key}] & Value: {cr.Message.Value}");
                 }
-            }, cancellationToken);
+            });
 
             return Task.CompletedTask;
 
