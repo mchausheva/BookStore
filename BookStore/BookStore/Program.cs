@@ -1,16 +1,21 @@
 using BookStore.BL.Background;
 using BookStore.BL.CommandHandlers;
+using BookStore.BL.Kafka;
 using BookStore.DL.Repositories.MsSQL;
 using BookStore.Extentions;
 using BookStore.HealthChecks;
 using BookStore.Middleware;
+using BookStore.Models.Configuration;
+using BookStore.Models.Configurations;
 using BookStore.Models.Models.Users;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.DataProtection.KeyManagement;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Newtonsoft.Json.Linq;
 using Serilog;
 using Serilog.Sinks.SystemConsole.Themes;
 using System.Text;
@@ -23,6 +28,12 @@ var logger = new LoggerConfiguration()
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Logging.AddSerilog(logger);
+
+builder.Services.Configure<MyJsonSettings>(
+    builder.Configuration.GetSection(nameof(MyJsonSettings)));
+
+builder.Services.Configure<KafkaSettings>(
+    builder.Configuration.GetSection(nameof(KafkaSettings)));
 
 // Add services to the container.
 builder.Services.RegisterRepositories()
@@ -94,8 +105,8 @@ builder.Services.AddIdentity<UserInfo, UserRole>()
                 .AddUserStore<UserInfoStore>()
                 .AddRoleStore<UserRoleStore>();
 
-builder.Services.AddHostedService<MyBackgroundService>();
-
+//builder.Services.AddHostedService<MyBackgroundService>();
+builder.Services.AddHostedService<ConsumerHostedService<int, int>>();
 
 //App builder below
 var app = builder.Build();
