@@ -37,9 +37,9 @@ namespace BookStore.Caches.Cache
             _consumerBuilder.Subscribe(_topicName);
         }
 
-        public Task GetCache(CancellationToken cancellationToken)
+        public async Task GetCache(CancellationToken cancellationToken)
         {
-            Task.Run(() =>
+            Task.Run( async () =>
             {
                 while (!cancellationToken.IsCancellationRequested)
                 {
@@ -51,7 +51,7 @@ namespace BookStore.Caches.Cache
 
             }, cancellationToken);
 
-            return Task.CompletedTask;
+            //return Task.CompletedTask;
         }
     }
 }
