@@ -1,12 +1,14 @@
 using BookStore.BL.Background;
 using BookStore.BL.CommandHandlers;
 using BookStore.BL.Kafka;
+using BookStore.Caches.Cache;
 using BookStore.DL.Repositories.MsSQL;
 using BookStore.Extentions;
 using BookStore.HealthChecks;
 using BookStore.Middleware;
 using BookStore.Models.Configuration;
 using BookStore.Models.Configurations;
+using BookStore.Models.Models;
 using BookStore.Models.Models.Users;
 using FluentValidation;
 using FluentValidation.AspNetCore;
@@ -35,10 +37,17 @@ builder.Services.Configure<MyJsonSettings>(
 builder.Services.Configure<KafkaSettings>(
     builder.Configuration.GetSection(nameof(KafkaSettings)));
 
+builder.Services.Configure<CacheSettings>(
+    builder.Configuration.GetSection(nameof(CacheSettings)));
+
+
 // Add services to the container.
 builder.Services.RegisterRepositories()
                 .RegisterServices()
                 .AddAutoMapper(typeof(Program));
+
+builder.Services.AddHostedService<CacheConsumer<int, Book>>();
+
 
 builder.Services.AddFluentValidationAutoValidation()
                 .AddFluentValidationClientsideAdapters();
@@ -104,9 +113,6 @@ builder.Services.AddMediatR(typeof(GetAllBooksCommandHandler).Assembly);
 builder.Services.AddIdentity<UserInfo, UserRole>()
                 .AddUserStore<UserInfoStore>()
                 .AddRoleStore<UserRoleStore>();
-
-//builder.Services.AddHostedService<MyBackgroundService>();
-//builder.Services.AddHostedService<ConsumerHostedService<int, int>>();
 
 //App builder below
 var app = builder.Build();

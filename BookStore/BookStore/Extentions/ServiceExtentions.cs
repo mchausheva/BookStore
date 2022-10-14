@@ -1,9 +1,12 @@
 ﻿using BookStore.BL.Interfaces;
 using BookStore.BL.Kafka;
 using BookStore.BL.Services;
+using BookStore.Caches.Cache;
 using BookStore.DL.Interfaces;
 using BookStore.DL.Repositories.InMemoryRepositories;
 using BookStore.DL.Repositories.MsSQL;
+using BookStore.Models.Models;
+using Newtonsoft.Json.Linq;
 
 namespace BookStore.Extentions
 {
@@ -26,8 +29,9 @@ namespace BookStore.Extentions
             services.AddSingleton<IBookService, BookService>();
             services.AddSingleton<IEmployeeService, EmployeeService>();
             services.AddTransient<IIdentityService, IdentityService>();
-            services.AddSingleton<IHostedService, ConsumerHostedService<int, int>>();
+
             services.AddSingleton<ProducerService<int, int>>();
+            services.AddSingleton<CacheService<int, Book>>();
 
             return services;
         }
