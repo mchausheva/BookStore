@@ -14,7 +14,7 @@ namespace BookStore.Caches.Cache
         {
             _logger = logger;
             _cacheDict = new Dictionary<TKey, TValue>();
-            _token = new CancellationTokenSource(2);
+            _token = new CancellationTokenSource();
 
             _cacheConsumer = cacheConsumer;
             _cacheConsumer.StartAsync(_cacheDict, _token.Token);
