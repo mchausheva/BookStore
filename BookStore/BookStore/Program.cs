@@ -1,7 +1,4 @@
-using BookStore.BL.Background;
 using BookStore.BL.CommandHandlers;
-using BookStore.BL.Kafka;
-using BookStore.Caches.Cache;
 using BookStore.DL.Repositories.MsSQL;
 using BookStore.Extentions;
 using BookStore.HealthChecks;
@@ -14,10 +11,8 @@ using FluentValidation;
 using FluentValidation.AspNetCore;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.DataProtection.KeyManagement;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using Newtonsoft.Json.Linq;
 using Serilog;
 using Serilog.Sinks.SystemConsole.Themes;
 using System.Text;
@@ -40,13 +35,15 @@ builder.Services.Configure<KafkaSettings>(
 builder.Services.Configure<CacheSettings>(
     builder.Configuration.GetSection(nameof(CacheSettings)));
 
+builder.Services.Configure<MongoDbConfiguration>(
+    builder.Configuration.GetSection(nameof(MongoDbConfiguration)));
+
+builder.Services.Subscribe2Cache<int, Book>();
 
 // Add services to the container.
 builder.Services.RegisterRepositories()
                 .RegisterServices()
                 .AddAutoMapper(typeof(Program));
-
-builder.Services.AddHostedService<CacheConsumer<int, Book>>();
 
 
 builder.Services.AddFluentValidationAutoValidation()

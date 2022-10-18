@@ -1,57 +1,29 @@
-﻿using BookStore.BL.Kafka;
-using BookStore.Models.Configurations;
-using BookStore.Models.Models;
-using Confluent.Kafka;
+﻿using BookStore.Models.Models;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 
 namespace BookStore.Caches.Cache
 {
     public class CacheService<TKey, TValue> where TValue : ICacheItem<TKey>
     {
         private readonly ILogger<CacheService<TKey, TValue>> _logger;
-        private IOptions<KafkaSettings> _kafkaSettings;
-        private readonly string _topicName;
-        private readonly ConsumerConfig _consumerConfig;
-        private readonly IConsumer<TKey, TValue> _consumerBuilder;
         private readonly IDictionary<TKey, TValue> _cacheDict;
+        private readonly CacheConsumer<TKey, TValue> _cacheConsumer;
+        private readonly CancellationTokenSource _token;
 
-        public CacheService(ILogger<CacheService<TKey, TValue>> logger, IOptions<KafkaSettings> kafkaSettings)
+        public CacheService(ILogger<CacheService<TKey, TValue>> logger, CacheConsumer<TKey, TValue> cacheConsumer)
         {
             _logger = logger;
-            _kafkaSettings = kafkaSettings;
-            _topicName = typeof(TValue).Name;
             _cacheDict = new Dictionary<TKey, TValue>();
+            _token = new CancellationTokenSource(2);
 
-            _consumerConfig = new ConsumerConfig()
-            {
-                BootstrapServers = _kafkaSettings.Value.BootstrapServers,
-                AutoOffsetReset = (AutoOffsetReset?)_kafkaSettings.Value.AutoOffsetReset,
-                GroupId = _kafkaSettings.Value.GroupId
-            };
-
-            _consumerBuilder = new ConsumerBuilder<TKey, TValue>(_consumerConfig)
-                .SetKeyDeserializer(new MsgPackDeserializer<TKey>())
-                .SetValueDeserializer(new MsgPackDeserializer<TValue>())
-                .Build();
-            _consumerBuilder.Subscribe(_topicName);
+            _cacheConsumer = cacheConsumer;
+            _cacheConsumer.StartAsync(_cacheDict, _token.Token);
         }
 
-        public async Task GetCache(CancellationToken cancellationToken)
+        public async Task<IDictionary<TKey, TValue>> GetCacheDict()
         {
-            Task.Run( async () =>
-            {
-                while (!cancellationToken.IsCancellationRequested)
-                {
-                    var cr = _consumerBuilder.Consume();
-                    _cacheDict.Add(cr.Message.Key, cr.Message.Value);
-
-                    _logger.LogInformation($"Delivered item! {cr.Message.Key} --> {cr.Message.Value}");
-                }
-
-            }, cancellationToken);
-
-            //return Task.CompletedTask;
+            _logger.LogInformation("Return dictionary with cache.");
+            return await Task.FromResult(_cacheDict);
         }
     }
 }

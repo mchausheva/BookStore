@@ -17,11 +17,11 @@ namespace BookStore.Controllers
         }
 
         [ProducesResponseType(StatusCodes.Status200OK)]
-        [HttpGet(nameof(GetBooks))]
-        public IActionResult GetBooks()
+        [HttpGet(nameof(GetAll))]
+        public async Task<IActionResult> GetAll()
         {
-            var result = _cacheService.GetCache(new CancellationToken());
-            return Ok();
+            var result = await _cacheService.GetCacheDict();
+            return Ok(result);
         }
     }
 }
