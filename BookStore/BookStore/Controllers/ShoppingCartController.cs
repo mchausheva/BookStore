@@ -1,4 +1,5 @@
 ﻿using BookStore.BL.Interfaces;
+using BookStore.BL.Kafka;
 using BookStore.BL.Services;
 using BookStore.Models.Models.Users;
 using BookStore.Models.Requests;
