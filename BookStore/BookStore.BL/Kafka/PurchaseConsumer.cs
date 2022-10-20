@@ -39,7 +39,7 @@ namespace BookStore.BL.Kafka
             var actionBlock = new ActionBlock<Purchase>(p =>
             {
                 transformerBlock.Post(p);
-                Console.WriteLine($"Received : {p.Id} --> {p.Books.Count()}");
+                Console.WriteLine($"Received : {p.UserId} --> {p.Books.Count()}");
             });
             transformerBlock.LinkTo(actionBlock);
         }
