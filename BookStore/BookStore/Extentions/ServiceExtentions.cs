@@ -7,6 +7,7 @@ using BookStore.DL.Repositories.InMemoryRepositories;
 using BookStore.DL.Repositories.Mongo;
 using BookStore.DL.Repositories.MsSQL;
 using BookStore.Models.Models;
+using BookStore.Models.Models.Users;
 
 namespace BookStore.Extentions
 {
@@ -33,9 +34,11 @@ namespace BookStore.Extentions
             services.AddSingleton<IEmployeeService, EmployeeService>();
             services.AddTransient<IIdentityService, IdentityService>();
             services.AddSingleton<ProducerService<int, int>>();
-
             services.AddSingleton<IPurchaseService, PurchaseService>();
             services.AddSingleton<IShoppingCartService, ShoppingCartService>();
+
+            services.AddHostedService<PurchaseConsumer>();
+            services.AddHostedService<DeliveryConsumer>();
 
             return services;
         }

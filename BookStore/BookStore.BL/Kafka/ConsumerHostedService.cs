@@ -6,17 +6,18 @@ using Microsoft.Extensions.Options;
 
 namespace BookStore.BL.Kafka
 {
-    public class ConsumerHostedService<TKey, TValue> : IHostedService
+    public abstract class ConsumerHostedService<TKey, TValue> : IHostedService
     {
-        ILogger<ConsumerHostedService<TKey, TValue>> _logger;
-        private IOptions<KafkaSettings> _kafkaSettings;
+        private readonly ILogger<ConsumerHostedService<TKey, TValue>> _logger;
+        private readonly IOptions<KafkaSettings> _kafkaSettings;
         private readonly string _topicName;
         private readonly ConsumerConfig _consumerConfig;
         private readonly IConsumer<TKey, TValue> _consumerBuilder;
+
         public ConsumerHostedService(IOptions<KafkaSettings> kafkaSettings, ILogger<ConsumerHostedService<TKey, TValue>> logger)
         {
             _kafkaSettings = kafkaSettings;
-            _topicName = "test";
+            _topicName = typeof(TValue).Name;
             _logger = logger;
             _consumerConfig = new ConsumerConfig()
             {
@@ -28,35 +29,32 @@ namespace BookStore.BL.Kafka
                 .SetKeyDeserializer(new MsgPackDeserializer<TKey>())
                 .SetValueDeserializer(new MsgPackDeserializer<TValue>())
                 .Build();
+            _consumerBuilder.Subscribe(_topicName);
         }
+
+        public abstract void HandleMessage(TValue value);
+
 
         public Task StartAsync(CancellationToken cancellationToken)
         {
-
             _logger.LogInformation($"Start -> {nameof(ConsumerHostedService<TKey, TValue>)}");
 
-            _consumerBuilder.Subscribe(_topicName);
-
-            Task.Run(() =>
+            Task.Run(async () =>
             {
                 while (!cancellationToken.IsCancellationRequested)
                 {
                     var cr = _consumerBuilder.Consume();
 
-                    Console.WriteLine($"Received msg with Key: [{cr.Message.Key}] & Value: {cr.Message.Value}");
+                    if (cr != null)
+                        HandleMessage(cr.Message.Value);
                 }
+
             });
-
             return Task.CompletedTask;
-
         }
 
         public Task StopAsync(CancellationToken cancellationToken)
         {
-            _logger.LogInformation($"Stopping -> {nameof(ConsumerHostedService<TKey, TValue>)}");
-
-            _consumerBuilder.Dispose();
-
             return Task.CompletedTask;
         }
     }

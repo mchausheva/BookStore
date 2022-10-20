@@ -2,7 +2,6 @@
 using BookStore.Models.Configurations;
 using BookStore.Models.Models.Users;
 using Microsoft.Extensions.Options;
-using MongoDB.Bson;
 using MongoDB.Driver;
 
 namespace BookStore.DL.Repositories.Mongo
@@ -35,7 +34,7 @@ namespace BookStore.DL.Repositories.Mongo
 
         public Task<Purchase> UpdatePurchase(Purchase purchase)
         {
-            var filter = Builders<Purchase>.Filter.Eq("Id", purchase.Id);
+            var filter = Builders<Purchase>.Filter.Eq("UserId", purchase.UserId);
             var update = Builders<Purchase>.Update.Set("Books", purchase.Books);
 
             _purchaseCollection.UpdateOne(filter, update);

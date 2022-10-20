@@ -1,4 +1,5 @@
 using BookStore.BL.CommandHandlers;
+using BookStore.BL.Kafka;
 using BookStore.DL.Repositories.MsSQL;
 using BookStore.Extentions;
 using BookStore.HealthChecks;
@@ -44,7 +45,6 @@ builder.Services.Subscribe2Cache<int, Book>();
 builder.Services.RegisterRepositories()
                 .RegisterServices()
                 .AddAutoMapper(typeof(Program));
-
 
 builder.Services.AddFluentValidationAutoValidation()
                 .AddFluentValidationClientsideAdapters();
