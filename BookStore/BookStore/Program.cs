@@ -1,5 +1,4 @@
 using BookStore.BL.CommandHandlers;
-using BookStore.BL.Kafka;
 using BookStore.DL.Repositories.MsSQL;
 using BookStore.Extentions;
 using BookStore.HealthChecks;
@@ -38,6 +37,10 @@ builder.Services.Configure<CacheSettings>(
 
 builder.Services.Configure<MongoDbConfiguration>(
     builder.Configuration.GetSection(nameof(MongoDbConfiguration)));
+
+builder.Services.Configure<HttpClientSettings>(
+    builder.Configuration.GetSection(nameof(HttpClientSettings)));
+
 
 builder.Services.Subscribe2Cache<int, Book>();
 

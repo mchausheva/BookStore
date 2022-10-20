@@ -1,5 +1,6 @@
 ﻿using BookStore.BL.Interfaces;
 using BookStore.BL.Kafka;
+using BookStore.BL.Provider;
 using BookStore.BL.Services;
 using BookStore.Caches.Cache;
 using BookStore.DL.Interfaces;
@@ -39,6 +40,7 @@ namespace BookStore.Extentions
 
             services.AddHostedService<PurchaseConsumer>();
             services.AddHostedService<DeliveryConsumer>();
+            services.AddSingleton<HttpClientService>(); 
 
             return services;
         }
