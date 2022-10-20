@@ -24,17 +24,20 @@ namespace BookStore.BL.Kafka
 
             transformerBlock = new TransformBlock<Delivery, Delivery>(del =>
             {
-                if (del.Book.Id != null)
+                var b = _bookRepository.GetById(del.Book.Id);
+
+                if (b != null)
                 {
-                    del.Book.Quantity--;
-                }    
+                    b.Result.Quantity--;
+                }
+
+                del.Book = _bookRepository.UpdateBook(b.Result).Result;
                 return del;
             });
 
             var actionBlock = new ActionBlock<Delivery>(del =>
             { 
                 transformerBlock.Post(del);
-                Console.WriteLine($"Received : {del.Book.Title} --> {del.Book.Quantity}");
             });
 
             transformerBlock.LinkTo(actionBlock);
